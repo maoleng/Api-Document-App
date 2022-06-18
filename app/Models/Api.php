@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Api extends Model
 {
     use HasFactory;
+
+
+    protected $fillable = [
+        'name', 'order', 'group_id', 'method_id',
+    ];
+
 }

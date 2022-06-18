@@ -15,7 +15,7 @@ class ApiController extends Controller
      */
     public function index()
     {
-        //
+        return view('index');
     }
 
     /**
@@ -25,7 +25,7 @@ class ApiController extends Controller
      */
     public function create()
     {
-        //
+        return view('create');
     }
 
     /**

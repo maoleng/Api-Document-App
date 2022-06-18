@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Method extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name', 'url', 'description', 'body_id', 'response_id', 'header_id', 'note',
+    ];
+
 }

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Response extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'key', 'value', 'sample_data',
+    ];
 }

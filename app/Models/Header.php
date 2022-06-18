@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Header extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'key', 'value', 'sample_data',
+    ];
 }

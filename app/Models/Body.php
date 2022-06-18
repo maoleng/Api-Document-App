@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Body extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'key', 'value', 'sample_data',
+    ];
 }
+
