@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class CheckLoginMiddleware
+class CheckAdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,9 @@ class CheckLoginMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $level = session()->get('level');
-        if (isset($level)) {
+        if (session()->get('level') === 1) {
             return $next($request);
         }
-        return redirect()->route('login_view');
+        return redirect(route('api.index'));
     }
 }

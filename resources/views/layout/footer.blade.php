@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
-                2022 © Hyper - Api Document App - Mao Leng
+                2022 © Api Document App - Mao Leng
             </div>
             <div class="col-md-6">
                 <div class="text-md-right footer-links d-none d-md-block">

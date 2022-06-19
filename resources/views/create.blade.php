@@ -112,8 +112,7 @@ name:string:tên của người dùng" name="response"></textarea>
 </form>
 @endsection
 
-@section('script_typeahead')
-
+@section('more_script')
     <script src="{{asset('assets/js/vendor/handlebars.min.js')}}"></script>
     <script src="{{asset('assets/js/vendor/typeahead.bundle.min.js')}}"></script>
     <script>
