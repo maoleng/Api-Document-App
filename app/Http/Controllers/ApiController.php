@@ -2,82 +2,174 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Api;
 use App\Http\Requests\StoreApiRequest;
 use App\Http\Requests\UpdateApiRequest;
+use App\Models\Api;
+use App\Models\Body;
+use App\Models\Group;
+use App\Models\Header;
+use App\Models\Method;
+use App\Models\Response as ResponseModel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ApiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): Factory|View|Application
     {
-        return view('index');
+        $groups = Group::with('api', 'api.method', 'api.method.headers', 'api.method.bodies', 'api.method.responses')->get();
+//dd($groups);
+//        foreach($groups[0]->api[0]->method->responses as $response) {
+//            dd($response->field);
+//        }
+        return view('index', [
+            'groups' => $groups
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(): View|Factory|Application
     {
         return view('create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreApiRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreApiRequest $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+
+        $data = $request->all();
+        $group = Group::query()->where('name', $data['group_name'])->first();
+        if (empty($group)) {
+            $create = Group::query()->create(['name' => $data['group_name']]);
+            $group_id = $create->id;
+        } else {
+            $group_id = $group->id;
+        }
+
+        $method_create = Method::query()->create([
+            'name' => $data['type_name'],
+            'url' => $data['url'],
+            'sample_body' => $data['sample_body'] ?? null,
+            'sample_response' => $data['sample_response'] ?? null,
+            'note' => $data['note'] ?? null,
+        ]);
+        $last_order = Api::query()->where('group_id', $group_id)->max('order');
+        Api::query()->create([
+            'name' => $data['api_name'],
+            'order' => ++$last_order,
+            'group_id' => $group_id,
+            'method_id' => $method_create->id
+        ]);
+
+        if (isset($data['header'])) {
+            $headers = explode("|", str_replace("\r\n", "|", $data['header']));
+            foreach ($headers as $header) {
+                Header::query()->create([
+                    'key' => explode(':', $header, 2)[0],
+                    'value' => explode(':', $header, 2)[1],
+                    'method_id' => $method_create->id
+                ]);
+            }
+        }
+        if (isset($data['body'])) {
+            $bodies = explode("|", str_replace("\r\n", "|", $data['body']));
+            foreach ($bodies as $body) {
+                Body::query()->create([
+                    'field' => explode(':', $body, 3)[0],
+                    'data_type' => explode(':', $body, 3)[1],
+                    'description' => explode(':', $body, 3)[2],
+                    'method_id' => $method_create->id
+                ]);
+            }
+        }
+        if (isset($data['response'])) {
+            $responses = explode("|", str_replace("\r\n", "|", $data['response']));
+            foreach ($responses as $response) {
+                ResponseModel::query()->create([
+                    'field' => explode(':', $response, 3)[0],
+                    'data_type' => explode(':', $response, 3)[1],
+                    'description' => explode(':', $response, 3)[2],
+                    'method_id' => $method_create->id
+                ]);
+            }
+        }
+
+        return redirect()->back();
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Api  $api
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Api $api)
+    public function edit(Api $api): Factory|View|Application
     {
-        //
+        $data = Api::query()->where('id', $api->id)->with('group', 'method', 'method.headers', 'method.bodies', 'method.responses')->first();
+        return view('edit', [
+            'data' => $data
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Api  $api
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Api $api)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateApiRequest  $request
-     * @param  \App\Models\Api  $api
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateApiRequest $request, Api $api)
+    public function update(Request $request, Api $api)
     {
-        //
+        $data = $request->all();
+        $method_id = $api->method->id;
+
+        Api::query()->where('id', $api->id)->update([
+            'name' => $data['api_name'],
+        ]);
+
+        Method::query()->where('id', $method_id)->update([
+            'name' => $data['type_name'],
+            'url' => $data['url'],
+            'sample_body' => $data['sample_body'],
+            'sample_response' => $data['sample_response'],
+            'note' => $data['note'],
+        ]);
+
+        if (isset($data['header'])) {
+            Header::query()->where('method_id', $api->method->id)->delete();
+            $headers = explode("|", str_replace("\r\n", "|", $data['header']));
+            foreach ($headers as $header) {
+                Header::query()->create([
+                    'key' => explode(':', $header, 2)[0],
+                    'value' => explode(':', $header, 2)[1],
+                    'method_id' => $method_id
+                ]);
+            }
+        }
+        if (isset($data['body'])) {
+            Body::query()->where('method_id', $api->method->id)->delete();
+            $bodies = explode("|", str_replace("\r\n", "|", $data['body']));
+            foreach ($bodies as $body) {
+                Body::query()->create([
+                    'field' => explode(':', $body, 3)[0],
+                    'data_type' => explode(':', $body, 3)[1],
+                    'description' => explode(':', $body, 3)[2],
+                    'method_id' => $method_id
+                ]);
+            }
+        }
+        if (isset($data['response'])) {
+            ResponseModel::query()->where('method_id', $api->method->id)->delete();
+            $responses = explode("|", str_replace("\r\n", "|", $data['response']));
+            foreach ($responses as $response) {
+                ResponseModel::query()->create([
+                    'field' => explode(':', $response, 3)[0],
+                    'data_type' => explode(':', $response, 3)[1],
+                    'description' => explode(':', $response, 3)[2],
+                    'method_id' => $method_id
+                ]);
+            }
+        }
+
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Api  $api
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Api $api)
     {

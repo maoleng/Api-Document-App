@@ -7,7 +7,7 @@
 
 /**
  * LeftSidebar
- * @param {*} $ 
+ * @param {*} $
  */
 !function ($) {
     'use strict';
@@ -38,7 +38,7 @@
     LeftSidebar.prototype.deactivateCondensedSidebar = function() {
         this.body.removeAttr('data-leftbar-compact-mode');
     },
-  
+
     /**
      * Activates the scrollable sidenar
      */
@@ -59,7 +59,7 @@
     LeftSidebar.prototype.activateDefaultTheme = function () {
         this._reset();
     },
-    
+
     /**
      * Activates the light theme
      */
@@ -163,14 +163,14 @@
     LeftSidebar.prototype.init = function() {
         this.initMenu();
     },
-  
+
     $.LeftSidebar = new LeftSidebar, $.LeftSidebar.Constructor = LeftSidebar
 }(window.jQuery),
 
 
 /**
  * Topbar
- * @param {*} $ 
+ * @param {*} $
  */
 function ($) {
     'use strict';
@@ -245,7 +245,7 @@ function ($) {
 
 /**
  * RightBar
- * @param {*} $ 
+ * @param {*} $
  */
 function ($) {
     'use strict';
@@ -255,7 +255,7 @@ function ($) {
         this.window = $(window)
     };
 
-    /** 
+    /**
      * Select the option based on saved config
     */
    RightBar.prototype._selectOptionsFromConfig = function() {
@@ -288,7 +288,7 @@ function ($) {
                 $('#light-mode-check').prop('checked', true);
                 if (config.layout === 'vertical')
                     $('input[type=radio][name=theme]').prop('disabled', false);
-            } 
+            }
             if (config.isDarkModeEnabled) {
                 $('#dark-mode-check').prop('checked', true);
                 if (config.layout === 'vertical')
@@ -296,7 +296,7 @@ function ($) {
             }
         }
     },
-  
+
     /**
      * Toggles the right sidebar
      */
@@ -392,7 +392,7 @@ function ($) {
                     // $('input[type=radio][name=theme]').prop('disabled', true);
                     break;
             }
-        });        
+        });
 
         // reset
         $('#resetBtn').on('click', function (e) {
@@ -410,7 +410,7 @@ function ($) {
 
 /**
  * Layout and theme manager
- * @param {*} $ 
+ * @param {*} $
  */
 
 function ($) {
@@ -488,7 +488,7 @@ function ($) {
         if (self._config.isDarkModeEnabled)
             self.activateDarkMode();
         else
-            self.deactivateDarkMode();
+            self.activateDarkMode();
 
         // sets the boxed
         if (self._config.isBoxed) self.activateBoxed();
@@ -631,7 +631,7 @@ function ($) {
      */
     LayoutThemeApp.prototype.reset = function(callback) {
         this.clearSavedConfig();
-        
+
         var self = this;
         if($("#main-style-container").length) {
             self.defaultSelectedStyle = $("#main-style-container").attr('href');
@@ -645,7 +645,7 @@ function ($) {
     },
 
     /**
-     * 
+     *
      */
     LayoutThemeApp.prototype.init = function() {
         var self = this;
@@ -653,7 +653,7 @@ function ($) {
         if($("#main-style-container").length) {
             self.defaultSelectedStyle = $("#main-style-container").attr('href');
         }
-        
+
         // initilize the menu
         this._applyConfig();
 
@@ -722,7 +722,7 @@ function ($) {
     },
     //
     $.Portlet = new Portlet, $.Portlet.Constructor = Portlet
-    
+
 }(window.jQuery),
 
 function($) {
@@ -734,7 +734,7 @@ function($) {
     };
 
 
-    /** 
+    /**
      * Initlizes the select2
     */
     AdvanceFormApp.prototype.initSelect2 = function() {
@@ -742,7 +742,7 @@ function($) {
         $('[data-toggle="select2"]').select2();
     },
 
-    /** 
+    /**
      * Initlized mask
     */
     AdvanceFormApp.prototype.initMask = function() {
@@ -843,7 +843,7 @@ function($) {
         });
     },
 
-    /** 
+    /**
      * Initilize
     */
    AdvanceFormApp.prototype.init = function() {
@@ -875,10 +875,10 @@ function($) {
      * @param {*} loaderBgColor loader background color
      * @param {*} icon icon which needs to be displayed
      * @param {*} hideAfter automatically hide after seconds
-     * @param {*} stack 
+     * @param {*} stack
      */
     NotificationApp.prototype.send = function(heading, body, position, loaderBgColor, icon, hideAfter, stack, showHideTransition) {
-        // default      
+        // default
         if (!hideAfter)
             hideAfter = 3000;
         if (!stack)
@@ -990,7 +990,7 @@ function($) {
                 }
                 element.innerText = out.join("\n");
             });
-        
+
             document.querySelectorAll('pre span.escape').forEach(function(block) {
                 hljs.highlightBlock(block);
             });
@@ -1118,7 +1118,7 @@ function ($) {
     App.prototype.resetLayout = function(callback) {
         $.LayoutThemeApp.reset(callback);
     },
-    
+
     /**
      * initilizing
      */
@@ -1141,7 +1141,7 @@ function ($) {
                 sessionStorage.setItem("_HYPER_VISITED_", true);
             }
         }
-        
+
         //creating portles
         $.Portlet.init();
         $.AdvanceFormApp.init();

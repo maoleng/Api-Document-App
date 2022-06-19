@@ -14,4 +14,9 @@ class Group extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function api()
+    {
+        return $this->hasMany(Api::class, 'group_id', 'id');
+    }
 }

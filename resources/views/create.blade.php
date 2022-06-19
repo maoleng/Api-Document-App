@@ -19,28 +19,30 @@
 <!-- end page title -->
 
 <!-- START MY CODE -->
+<form action="{{route('api.store')}}" method="post">
+    @csrf
 <div class="form-group">
     <label>Tên nhóm</label>
-    <input type="text" class="form-control" data-provide="typeahead" id="prefetch" placeholder="States of USA">
+    <input type="text" class="form-control" data-provide="typeahead" id="prefetch" placeholder="States of USA" name="group_name">
 </div>
 
 <div class="mt-2">
     <label>Phương thức</label>
     <br>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="customRadio1" name="customRadio1" class="custom-control-input">
+        <input type="radio" id="customRadio1" name="type_name" class="custom-control-input" value="get">
         <label class="custom-control-label" for="customRadio1">GET</label>
     </div>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="customRadio2" name="customRadio1" class="custom-control-input">
+        <input type="radio" id="customRadio2" name="type_name" class="custom-control-input" value="post">
         <label class="custom-control-label" for="customRadio2">POST</label>
     </div>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="customRadio3" name="customRadio1" class="custom-control-input">
+        <input type="radio" id="customRadio3" name="type_name" class="custom-control-input" value="put">
         <label class="custom-control-label" for="customRadio3">PUT</label>
     </div>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="customRadio4" name="customRadio1" class="custom-control-input">
+        <input type="radio" id="customRadio4" name="type_name" class="custom-control-input" value="delete">
         <label class="custom-control-label" for="customRadio4">DELETE</label>
     </div>
 </div>
@@ -49,48 +51,48 @@
 
 <div class="form-group">
     <label for="example-palaceholder">URL</label>
-    <input type="text" id="example-palaceholder" class="form-control" placeholder="/api/app/student/{id:mã của học sinh}">
+    <input type="text" id="example-palaceholder" class="form-control" placeholder="/api/app/student/{id:mã của học sinh}" name="url">
 </div>
 
 <div class="form-group">
     <label for="example-palaceholder">Mô tả về API</label>
-    <input type="text" id="example-palaceholder" class="form-control" placeholder="trả về chi tiết 1 học sinh">
+    <input type="text" id="example-palaceholder" class="form-control" placeholder="trả về chi tiết 1 học sinh" name="api_name">
 </div>
 
 <div class="form-group">
     <label for="example-textarea">Header</label>
-    <textarea class="form-control" id="example-textarea" rows="2" placeholder="Authorization:Bearer\: {token}
-Content-Type:application/json"></textarea>
+    <textarea class="form-control" id="example-textarea" rows="2" placeholder="Authorization:Bearer: {token}
+Content-Type:application/json" name="header"></textarea>
 </div>
 
 <div class="form-group">
     <label for="example-textarea">Body</label>
     <textarea class="form-control" id="example-textarea" rows="5" placeholder="username:string:tên tài khoản
 password:string:mật khẩu
-name:string:tên của người dùng"></textarea>
+name:string:tên của người dùng" name="body"></textarea>
 </div>
 
 <div class="form-group">
     <label for="example-textarea">Dữ liệu mẫu cho body</label>
-    <textarea class="form-control" id="example-textarea" rows="3" placeholder="{&quot;id&quot;:0,&quot;category&quot;:{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;},&quot;name&quot;:&quot;doggie&quot;,&quot;photoUrls&quot;:[&quot;string&quot;],&quot;tags&quot;:[{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;}],&quot;status&quot;:&quot;available&quot;}"></textarea>
+    <textarea class="form-control" id="example-textarea" rows="3" placeholder="{&quot;id&quot;:0,&quot;category&quot;:{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;},&quot;name&quot;:&quot;doggie&quot;,&quot;photoUrls&quot;:[&quot;string&quot;],&quot;tags&quot;:[{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;}],&quot;status&quot;:&quot;available&quot;}" name="sample_body"></textarea>
 </div>
 
 <div class="form-group">
     <label for="example-textarea">Response</label>
     <textarea class="form-control" id="example-textarea" rows="5" placeholder="username:string:tên tài khoản
 password:string:mật khẩu
-name:string:tên của người dùng"></textarea>
+name:string:tên của người dùng" name="response"></textarea>
 </div>
 
 <div class="form-group">
     <label for="example-textarea">Dữ liệu mẫu cho response</label>
-    <textarea class="form-control" id="example-textarea" rows="3" placeholder="{&quot;id&quot;:0,&quot;category&quot;:{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;},&quot;name&quot;:&quot;doggie&quot;,&quot;photoUrls&quot;:[&quot;string&quot;],&quot;tags&quot;:[{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;}],&quot;status&quot;:&quot;available&quot;}"></textarea>
+    <textarea class="form-control" id="example-textarea" rows="3" placeholder="{&quot;id&quot;:0,&quot;category&quot;:{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;},&quot;name&quot;:&quot;doggie&quot;,&quot;photoUrls&quot;:[&quot;string&quot;],&quot;tags&quot;:[{&quot;id&quot;:0,&quot;name&quot;:&quot;string&quot;}],&quot;status&quot;:&quot;available&quot;}" name="sample_response"></textarea>
 </div>
 
 
 <div class="form-group">
     <label for="example-textarea">Note</label>
-    <textarea class="form-control" id="example-textarea" rows="3" placeholder="không có note"></textarea>
+    <textarea class="form-control" id="example-textarea" rows="3" placeholder="không có note" name="note"></textarea>
 </div>
 
 <!--  <div class="form-group">
@@ -103,10 +105,29 @@ name:string:tên của người dùng"></textarea>
          <option>Cuối cùng</option>
      </select>
  </div> -->
-<button type="button" class="btn btn-warning"><i class="mdi mdi-rocket mr-1"></i> <span>Launch</span> </button>
+<button class="btn btn-warning"><i class="mdi mdi-rocket mr-1"></i> <span>Launch</span> </button>
 
 <!-- END MY CODE -->
 
-</div>
+</form>
+@endsection
 
+@section('script_typeahead')
+
+    <script src="{{asset('assets/js/vendor/handlebars.min.js')}}"></script>
+    <script src="{{asset('assets/js/vendor/typeahead.bundle.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            var a = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                prefetch: "{{route('group')}}"
+            });
+            $("#prefetch").typeahead(null, {
+                name: "countries",
+                source: a
+            });
+
+        });
+    </script>
 @endsection

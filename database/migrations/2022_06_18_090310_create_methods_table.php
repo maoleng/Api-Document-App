@@ -17,12 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name', 10);
             $table->string('url', 250);
-            $table->text('description');
-            $table->foreignId('body_id')->nullable()->constrained('bodies');
-            $table->foreignId('response_id')->nullable()->constrained('responses');
-            $table->foreignId('header_id')->nullable()->constrained('headers');
+            $table->text('sample_body')->nullable();
+            $table->text('sample_response')->nullable();
             $table->text('note')->nullable();
-            $table->timestamps();
         });
     }
 

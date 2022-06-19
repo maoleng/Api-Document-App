@@ -12,7 +12,7 @@ class Body extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'key', 'value', 'sample_data',
+        'field', 'data_type', 'description', 'method_id'
     ];
 }
 

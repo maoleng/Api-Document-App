@@ -12,6 +12,6 @@ class Header extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'key', 'value', 'sample_data',
+        'key', 'value', 'method_id'
     ];
 }

@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('responses', function (Blueprint $table) {
             $table->id();
-            $table->string('key', 250);
-            $table->string('value', 250);
-            $table->text('sample_data');
+            $table->string('field', 250);
+            $table->string('data_type', 250);
+            $table->string('description', 250);
+            $table->foreignId('method_id')->constrained('methods');
         });
     }
 

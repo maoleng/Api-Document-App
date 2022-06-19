@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('key', 250);
             $table->string('value', 250);
-            $table->text('sample_data');
+            $table->foreignId('method_id')->constrained('methods');
         });
     }
 

@@ -1,4 +1,38 @@
 @extends('layout.master')
+@section('more_style')
+    <style>
+        .pre-wrapper{
+            position:relative;
+        }
+        .pre-wrapper pre{
+            padding-top: 25px;
+        }
+        .pre-wrapper .copy-snippet {
+            border-radius: 0;
+            min-width:55px;
+            background: none repeat scroll 0 0 transparent;
+            border: 1px solid #bbb;
+            color: #26589F;
+            font-family: 'HELEVETICA',sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+            line-height: 1.42rem;
+            margin: 0;
+            padding: 0px 5px;
+            text-align: center;
+            text-decoration: none;
+            text-indent: 0;
+            position:absolute;
+            background:#ccc;
+            top:0;
+            left:0;
+        }
+        .pre-wrapper .copy-snippet:disabled{
+            color:#555;
+        }
+    </style>
+
+@endsection
 
 @section('content')
 
@@ -16,66 +50,67 @@
 
 
     <div class="accordion custom-accordion" id="custom-accordion-one">
+        @foreach($groups as $key => $group)
         <div class="card mb-0">
-            <div class="card-header" id="headingEight">
+            <div class="card-header" id="heading{{$key}}">
                 <h5 class="m-0">
                     <a class="custom-accordion-title collapsed d-block py-1" data-toggle="collapse"
-                       href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                        Student <i class="mdi mdi-chevron-down accordion-arrow"></i>
+                       href="#collapse{{$key}}" aria-expanded="false" aria-controls="collapse{{$key}}">
+                        {{$group->name}} <i class="mdi mdi-chevron-down accordion-arrow"></i>
                     </a>
                 </h5>
             </div>
 
-            <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#custom-accordion-one">
+            <div id="collapse{{$key}}" class="collapse" aria-labelledby="heading{{$key}}" data-parent="#custom-accordion-one">
                 <div class="card-body">
                     <!-- start object 1 -->
                     <div class="tab-content">
                         <div class="tab-pane show active" id="default-accordions-preview">
                             <div class="accordion" id="accordionExample">
+                                @foreach($group->api as $api)
                                 <div class="card mb-0">
-                                    <div class="card-header" id="headingOne">
+                                    <div class="card-header" id="headingApi{{$api->uniqueName}}">
                                         <h3 class="m-0">
                                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2"
-                                               data-toggle="collapse" href="#collapseOne" aria-expanded="false"
-                                               aria-controls="collapseOne">
-                                                <span class="badge badge-primary">GET</span>
-                                                /api/app/student/<span data-toggle="tooltip" title=""
-                                                                       data-original-title="Mã của học sinh">{id}</span>
+                                               data-toggle="collapse" href="#collapse{{$api->uniqueName}}" aria-expanded="false"
+                                               aria-controls="collapse{{$api->uniqueName}}">
+                                                <span class="badge {{$api->method->badgeColorByMethod}}">{{$api->method->beautyMethodName}}</span>
+                                                {{$api->method->beautifulUrl}}<span data-toggle="tooltip" title="" data-original-title="{{$api->method->valueToolTipUrl}}">{{{$api->method->keyToolTipUrl}}}</span>
                                             </a>
                                         </h3>
-                                        <span>Lấy ra toàn bộ sinh viên</span>
+                                        <span>{{$api->name}}</span>
                                     </div>
 
-                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                    <div id="collapse{{$api->uniqueName}}" class="collapse" aria-labelledby="headingApi{{$api->uniqueName}}"
                                          data-parent="#accordionExample">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-3 mb-2 mb-sm-0">
                                                     <div class="nav flex-column nav-pills" id="v-pills-tab"
                                                          role="tablist" aria-orientation="vertical">
-                                                        <a class="nav-link active show" id="v-pills-home-tab"
-                                                           data-toggle="pill" href="#v-pills-home" role="tab"
-                                                           aria-controls="v-pills-home"
+                                                        <a class="nav-link active show" id="{{$api->uniqueName}}v-pills-home-tab"
+                                                           data-toggle="pill" href="#{{$api->uniqueName}}v-pills-home" role="tab"
+                                                           aria-controls="{{$api->uniqueName}}v-pills-home"
                                                            aria-selected="true">
                                                             <i class="mdi mdi-home-variant d-md-none d-block"></i>
                                                             <span class="d-none d-md-block">Header</span>
                                                         </a>
-                                                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"
-                                                           href="#v-pills-profile" role="tab"
-                                                           aria-controls="v-pills-profile"
+                                                        <a class="nav-link" id="{{$api->uniqueName}}v-pills-profile-tab" data-toggle="pill"
+                                                           href="#{{$api->uniqueName}}v-pills-profile" role="tab"
+                                                           aria-controls="{{$api->uniqueName}}v-pills-profile"
                                                            aria-selected="false">
                                                             <i class="mdi mdi-account-circle d-md-none d-block"></i>
                                                             <span class="d-none d-md-block">Body</span>
                                                         </a>
-                                                        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill"
-                                                           href="#v-pills-settings" role="tab"
-                                                           aria-controls="v-pills-settings"
+                                                        <a class="nav-link" id="{{$api->uniqueName}}v-pills-settings-tab" data-toggle="pill"
+                                                           href="#{{$api->uniqueName}}v-pills-settings" role="tab"
+                                                           aria-controls="{{$api->uniqueName}}v-pills-settings"
                                                            aria-selected="false">
                                                             <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                                                             <span class="d-none d-md-block">Response</span>
                                                         </a>
-                                                        <a class="nav-link" id="v-pills-car-tab" data-toggle="pill"
-                                                           href="#v-pills-car" role="tab" aria-controls="v-pills-car"
+                                                        <a class="nav-link" id="{{$api->uniqueName}}v-pills-car-tab" data-toggle="pill"
+                                                           href="#{{$api->uniqueName}}v-pills-car" role="tab" aria-controls="{{$api->uniqueName}}v-pills-car"
                                                            aria-selected="false">
                                                             <i class="mdi mdi-car-outline d-md-none d-block"></i>
                                                             <span class="d-none d-md-block">Note</span>
@@ -85,8 +120,8 @@
 
                                                 <div class="col-sm-9">
                                                     <div class="tab-content" id="v-pills-tabContent">
-                                                        <div class="tab-pane fade active show" id="v-pills-home"
-                                                             role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                                        <div class="tab-pane fade active show" id="{{$api->uniqueName}}v-pills-home"
+                                                             role="tabpanel" aria-labelledby="{{$api->uniqueName}}v-pills-home-tab">
                                                             <p class="mb-0">
                                                             <h3>Mô tả</h3>
                                                             <table class="table mb-0">
@@ -97,20 +132,18 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                @foreach($api->method->headers as $header)
                                                                 <tr>
-                                                                    <th scope="row">Authorization</th>
-                                                                    <td>Bearer: {token}</td>
+                                                                    <th scope="row">{{$header->key}}</th>
+                                                                    <td>{{$header->value}}</td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <th scope="row">Content-Type</th>
-                                                                    <td>application/json</td>
-                                                                </tr>
+                                                                @endforeach
                                                                 </tbody>
                                                             </table>
                                                             </p>
                                                         </div>
-                                                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                                                             aria-labelledby="v-pills-profile-tab">
+                                                        <div class="tab-pane fade" id="{{$api->uniqueName}}v-pills-profile" role="tabpanel"
+                                                             aria-labelledby="{{$api->uniqueName}}v-pills-profile-tab">
                                                             <!-- Start decription body -->
                                                             <p class="mb-0">
                                                             <h3>Mô tả</h3>
@@ -124,52 +157,25 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                @foreach($api->method->bodies as $body)
                                                                 <tr>
-                                                                    <th scope="row">username</th>
-                                                                    <td>password</td>
-                                                                    <td>name</td>
+                                                                    <th scope="row">{{$body->field}}</th>
+                                                                    <td>{{$body->data_type}}</td>
+                                                                    <td>{{$body->description}}</td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <th scope="row">string</th>
-                                                                    <td>string</td>
-                                                                    <td>string</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th scope="row">username</th>
-                                                                    <td>Mật khẩu đăng nhập</td>
-                                                                    <td>Họ và tên người dùng</td>
-                                                                </tr>
+                                                                @endforeach
                                                                 </tbody>
                                                             </table>
                                                             <h3>Dữ liệu mẫu</h3>
 
                                                             <p class="text-white">
-                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;">
-{
-  "id": 0,
-  "category": {
-    "id": 0,
-    "name": "string"
-  },
-  "name": "doggie",
-  "photoUrls": [
-    "string"
-  ],
-  "tags": [
-    {
-      "id": 0,
-      "name": "string"
-    }
-  ],
-  "status": "available"
-}
-                        </pre>
+                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;">{{$api->method->beautifulJsonBody}}</pre>
                                                             </p>
                                                             </p>
                                                             <!-- end decription body -->
                                                         </div>
-                                                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
-                                                             aria-labelledby="v-pills-settings-tab">
+                                                        <div class="tab-pane fade" id="{{$api->uniqueName}}v-pills-settings" role="tabpanel"
+                                                             aria-labelledby="{{$api->uniqueName}}v-pills-settings-tab">
                                                             <!-- Start decription response -->
                                                             <p class="mb-0">
                                                             <h3>Mô tả</h3>
@@ -183,113 +189,41 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                @foreach($api->method->responses as $response)
                                                                 <tr>
-                                                                    <th scope="row">username</th>
-                                                                    <td>password</td>
-                                                                    <td>name</td>
+                                                                    <th scope="row">{{$response->field}}</th>
+                                                                    <td>{{$response->data_type}}</td>
+                                                                    <td>{{$response->description}}</td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <th scope="row">string</th>
-                                                                    <td>string</td>
-                                                                    <td>string</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th scope="row">username</th>
-                                                                    <td>Mật khẩu đăng nhập</td>
-                                                                    <td>Họ và tên người dùng</td>
-                                                                </tr>
+                                                                @endforeach
                                                                 </tbody>
                                                             </table>
                                                             <h3>Dữ liệu mẫu</h3>
 
                                                             <p class="text-white">
-                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;">
-{
-  "id": 0,
-  "category": {
-    "id": 0,
-    "name": "string"
-  },
-  "name": "doggie",
-  "photoUrls": [
-    "string"
-  ],
-  "tags": [
-    {
-      "id": 0,
-      "name": "string"
-    }
-  ],
-  "status": "available"
-}
-                        </pre>
+                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;">{{$api->method->beautifulJsonResponse}}</pre>
                                                             </p>
                                                             </p>
                                                             <!-- end decription response -->
                                                         </div>
+                                                        <div class="tab-pane fade" id="{{$api->uniqueName}}v-pills-car" role="tabpanel"
+                                                        aria-labelledby="{{$api->uniqueName}}v-pills-car-tab">
+                                                            <p class="mb-0">
+                                                                <h3>Chú ý</h3>
+                                                                <span>{{$api->method->note}}</span>
+                                                            </p>
+                                                        </div>
                                                     </div> <!-- end tab-content-->
                                                 </div> <!-- end col-->
                                             </div>
-
+                                            <form action="{{route('api.edit', ['api' => $api->id])}}">
+                                                <button type="submit" class="btn btn-outline-dark">Dark</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card mb-0">
-                                    <div class="card-header" id="headingTwo">
-                                        <h3 class="m-0">
-                                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2"
-                                               data-toggle="collapse" href="#collapseTwo" aria-expanded="false"
-                                               aria-controls="collapseTwo">
-                                                <span class="badge badge-success">POST</span>
-                                                /api/app/student/
-                                            </a>
-                                        </h3>
-                                    </div>
-                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                         data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            ...
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card mb-0">
-                                    <div class="card-header" id="headingThree">
-                                        <h3 class="m-0">
-                                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2"
-                                               data-toggle="collapse" href="#collapseThree" aria-expanded="false"
-                                               aria-controls="collapseThree">
-                                                <span class="badge badge-warning">PUT</span>
-                                                /api/app/student/{id}
-                                            </a>
-                                        </h3>
-                                    </div>
-                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                         data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            ...
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
 
-                                <div class="card mb-0">
-                                    <div class="card-header" id="headingFour">
-                                        <h3 class="m-0">
-                                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2"
-                                               data-toggle="collapse" href="#collapseFour" aria-expanded="false"
-                                               aria-controls="collapseFour">
-                                                <span class="badge badge-secondary">DELETE</span>
-                                                /api/app/student/{id}
-                                            </a>
-                                        </h3>
-                                    </div>
-                                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
-                                         data-parent="#accordionExample">
-                                        <div class="card-body">
-
-
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -297,52 +231,64 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-0">
-            <div class="card-header" id="headingFive">
-                <h5 class="m-0">
-                    <a class="custom-accordion-title collapsed d-block py-1" data-toggle="collapse" href="#collapseFive"
-                       aria-expanded="false" aria-controls="collapseFive">
-                        Q. Can this theme work with Wordpress? <i class="mdi mdi-chevron-down accordion-arrow"></i>
-                    </a>
-                </h5>
-            </div>
-            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#custom-accordion-one">
-                <div class="card-body">
-                    ...
-                </div>
-            </div>
-        </div>
-        <div class="card mb-0">
-            <div class="card-header" id="headingSix">
-                <h5 class="m-0">
-                    <a class="custom-accordion-title collapsed d-block py-1" data-toggle="collapse" href="#collapseSix"
-                       aria-expanded="false" aria-controls="collapseSix">
-                        Q. How do I get help with the theme? <i class="mdi mdi-chevron-down accordion-arrow"></i>
-                    </a>
-                </h5>
-            </div>
-            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#custom-accordion-one">
-                <div class="card-body">
-                    ...
-                </div>
-            </div>
-        </div>
-        <div class="card mb-0">
-            <div class="card-header" id="headingSeven">
-                <h5 class="m-0">
-                    <a class="custom-accordion-title collapsed d-block py-1" data-toggle="collapse"
-                       href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                        Q. Will you regularly give updates of Hyper ? <i
-                            class="mdi mdi-chevron-down accordion-arrow"></i>
-                    </a>
-                </h5>
-            </div>
-            <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#custom-accordion-one">
-                <div class="card-body">
-                    ...
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
+
+@endsection
+
+@section('more_script')
+    <script>
+        //<![CDATA[
+        jQuery( document).ready(function($){
+            var copyid = 0;
+            $('pre').each(function(){
+                copyid++;
+                $(this).attr( 'data-copyid', copyid).wrap( '<div class="pre-wrapper"/>');
+                $(this).parent().css( 'margin', $(this).css( 'margin') );
+                $('<button class="copy-snippet">Copy</button>').insertAfter( $(this) ).data( 'copytarget',copyid );
+            });
+
+            $('body').on('click', '.copy-snippet', function(ev){
+                ev.preventDefault();
+
+                let $copyButton = $(this);
+
+                let $pre = $(document).find('pre[data-copyid=' + $copyButton.data('copytarget') + ']');
+                if ( $pre.length ) {
+                    let textArea = document.createElement("textarea");
+                    textArea.style.position = 'fixed';
+                    textArea.style.top = -100;
+                    textArea.style.left = -100;
+
+                    textArea.style.width = '2em';
+                    textArea.style.height = '2em';
+
+                    textArea.style.padding = 0;
+
+                    textArea.style.border = 'none';
+                    textArea.style.outline = 'none';
+                    textArea.style.boxShadow = 'none';
+
+                    textArea.style.background = 'transparent';
+
+                    textArea.value = $pre.html();
+
+                    document.body.appendChild(textArea);
+                    textArea.select();
+
+                    try {
+                        document.execCommand('copy');
+                        $copyButton.text( 'Copied').prop('disabled', true)
+                    } catch (err) {
+                        $copyButton.text( 'FAILED: Could not copy').prop('disabled', true)
+                    }
+                    setTimeout(function(){
+                        $copyButton.text( 'Copy').prop('disabled', false)
+                    }, 3000);
+                }
+            });
+        });
+
+    </script>
 
 @endsection
