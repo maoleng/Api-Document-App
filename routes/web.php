@@ -7,6 +7,9 @@ use App\Http\Middleware\CheckAdminMiddleware;
 use App\Http\Middleware\CheckLoginMiddleware;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', static function() {
+    return redirect()->route('login');
+});
 Route::get('/login', [AuthController::class, 'loginView'])->name('login_view');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

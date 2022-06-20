@@ -11,8 +11,11 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function loginView(): Application|View|Factory
+    public function loginView(): Application|Factory|View|RedirectResponse
     {
+        if (session()->get('level') !== null) {
+            return redirect()->route('api.index');
+        }
         return view('login');
     }
 
