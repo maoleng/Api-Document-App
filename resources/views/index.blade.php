@@ -169,7 +169,7 @@
                                                             <h3>Dữ liệu mẫu</h3>
 
                                                             <p class="text-white">
-                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;">{{$api->method->beautifulJsonBody}}</pre>
+                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;"><code>{{$api->method->beautifulJsonBody}}</code></pre>
                                                             </p>
                                                             </p>
                                                             <!-- end decription body -->
@@ -201,7 +201,7 @@
                                                             <h3>Dữ liệu mẫu</h3>
 
                                                             <p class="text-white">
-                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;">{{$api->method->beautifulJsonResponse}}</pre>
+                                                            <pre style="word-wrap: break-word; white-space: pre-wrap;"><code>{{$api->method->beautifulJsonResponse}}</code></pre>
                                                             </p>
                                                             </p>
                                                             <!-- end decription response -->
@@ -216,9 +216,11 @@
                                                     </div> <!-- end tab-content-->
                                                 </div> <!-- end col-->
                                             </div>
+                                            @if(session()->get('level') === 1)
                                             <form action="{{route('api.edit', ['api' => $api->id])}}">
-                                                <button type="submit" class="btn btn-outline-dark">Dark</button>
+                                                <button type="submit" class="btn btn-outline-dark">Sửa</button>
                                             </form>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

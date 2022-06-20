@@ -21,11 +21,11 @@ class ApiController extends Controller
 {
     public function index(): Factory|View|Application
     {
-        $groups = Group::with('api', 'api.method', 'api.method.headers', 'api.method.bodies', 'api.method.responses')->get();
+        $groups = Group::with('api', 'api.method', 'api.method.headers', 'api.method.bodies', 'api.method.responses')
+//            ->join('apis', 'apis.group_id', '=', 'groups.id')
+//            ->orderBy('order', 'DESC')
+            ->get();
 //dd($groups);
-//        foreach($groups[0]->api[0]->method->responses as $response) {
-//            dd($response->field);
-//        }
         return view('index', [
             'groups' => $groups
         ]);

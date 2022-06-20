@@ -34,6 +34,7 @@
                 </a>
             </li>
 
+            @if(session()->get('level') === 1)
             <li class="side-nav-title side-nav-item">Quản lý</li>
 
             <li class="side-nav-item">
@@ -50,7 +51,7 @@
                     <span> Chat </span>
                 </a>
             </li>
-
+            @endif
         </ul>
 
         <!-- End Sidebar -->
