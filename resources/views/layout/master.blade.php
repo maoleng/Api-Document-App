@@ -2,10 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Starter Page | Hyper - Responsive Bootstrap 4 Admin Dashboard</title>
+    <title>Api Document App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-    <meta content="Coderthemes" name="author" />
+
+    <!-- Google / Search Engine Tags -->
+    <meta itemprop="name" content="Api Document">
+    <meta itemprop="description" content="Api Document">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://api-document.maoleng.dev">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Api Document App">
+    <meta property="og:image" content="{{asset('assets/img/meta-image.jpg')}}">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:title" content="Api Document App">
+    <meta name="twitter:image" content="{{asset('assets/img/meta-image.jpg')}}">
+    <meta name="twitter:card" content="{{asset('assets/img/meta-image.jpg')}}">
+
+    <meta content="App" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
 
