@@ -3,10 +3,11 @@
     <!-- LOGO -->
     <a href="{{route('api.index')}}" class="logo text-center logo-light">
         <span class="logo-lg">
-            <img src="{{asset('assets/images/logo.png')}}" alt="" height="16">
+{{--            <img src="{{asset('assets/images/logo.png')}}" alt="" height="16">--}}
+            <h2>Api Document App</h2>
         </span>
         <span class="logo-sm">
-            <img src="{{asset('assets/images/logo_sm.png')}}" alt="" height="16">
+{{--            <img src="{{asset('assets/images/logo_sm.png')}}" alt="" height="16">--}}
         </span>
     </a>
 
