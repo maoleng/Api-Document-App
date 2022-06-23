@@ -75,12 +75,12 @@ class Method extends Model
     public function getBeautifulJsonBodyAttribute(): bool|string
     {
 
-        return json_encode(json_decode($this->sample_body), JSON_PRETTY_PRINT);
+        return json_encode(json_decode($this->sample_body, JSON_UNESCAPED_UNICODE ), JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE );
     }
 
     public function getBeautifulJsonResponseAttribute(): bool|string
     {
-        return json_encode(json_decode($this->sample_response), JSON_PRETTY_PRINT);
+        return json_encode(json_decode($this->sample_response, JSON_UNESCAPED_UNICODE ), JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
     }
 }
 
