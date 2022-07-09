@@ -28,7 +28,7 @@ class Api extends Model
     public function getUniqueNameAttribute(): string
     {
         $temp_str = str_replace(' ', '', $this->convert_vi_to_en($this->name));
-        return strlen($temp_str) > 10 ? substr($temp_str, 0, 10) : $temp_str;
+        return strlen($temp_str) > 10 ? substr($temp_str, 0, 10).  $this->group_id . $this->method_id : $temp_str . $this->group_id . $this->method_id;
     }
     public function convert_vi_to_en($str): array|string|null
     {
