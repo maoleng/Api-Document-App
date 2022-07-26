@@ -120,7 +120,7 @@ name:string:tên của người dùng" name="response"></textarea>
             var a = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.whitespace,
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                prefetch: "{{route('group')}}"
+                prefetch: "{{getUrl('group')}}"
             });
             $("#prefetch").typeahead(null, {
                 name: "countries",

@@ -2,6 +2,7 @@
 
 
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
 
 if (! function_exists('getName')) {
     function getName() {
@@ -9,3 +10,9 @@ if (! function_exists('getName')) {
     }
 }
 
+if (! function_exists('getUrl')) {
+    function getUrl($name): string
+    {
+        return URL::to("/$name");
+    }
+}
