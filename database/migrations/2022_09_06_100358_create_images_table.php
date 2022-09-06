@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('methods', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 10);
-            $table->string('url', 250);
-            $table->text('sample_body')->nullable();
-            $table->text('sample_response')->nullable();
-            $table->longText('note')->nullable();
+            $table->string('source', 250);
+            $table->string('path', 250);
+            $table->float('size');
+            $table->boolean('active')->default(1);
+            $table->foreignId('method_id')->constrained('methods');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('methods');
+        Schema::dropIfExists('images');
     }
 };
