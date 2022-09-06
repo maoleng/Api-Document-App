@@ -19,12 +19,30 @@
     <!-- end page title -->
 
     <!-- START MY CODE -->
-    <form action="{{route('api.update', ['api' => $data->id])}}" method="post">
+    <form id="main_form" action="{{route('api.update', ['api' => $data->id])}}" method="post">
         @method('PUT')
         @csrf
         <div class="form-group">
             <label>Tên nhóm</label>
-            <input disabled value="{{$data->group->name}}" type="text" class="form-control" data-provide="typeahead" id="prefetch" placeholder="States of USA" name="group_name">
+            <br>
+            Thêm nhóm mới
+            <input type="checkbox" id="toggle_group_name" data-switch="none"/>
+            <label for="toggle_group_name" data-on-label="" data-off-label=""></label>
+
+            <div>
+                <select id="group_name_2" name="group_name" class="form-control select2" data-toggle="select2">
+                    @foreach($group_names as $key => $group_name)
+                        <option value="{{$group_name}}"
+                            @if($group_name === $data->group->name) selected @endif
+                        >
+                            {{$group_name}}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <input type="text" id="group_name_1" class="form-control" hidden placeholder="Nhóm Users" name="group_name">
+
         </div>
 
         <div class="mt-2">
@@ -96,7 +114,7 @@ name:string:tên của người dùng" name="response">@foreach($data->method->r
 
         <div class="form-group">
             <label for="example-textarea">Note</label>
-            <textarea class="form-control" id="example-textarea" rows="3" placeholder="không có note" name="note">{{$data->method->note}}</textarea>
+            <textarea class="form-control" rows="3" placeholder="không có note" name="note" id="myeditorinstance">{{$data->method->note}}</textarea>
         </div>
 
         <!--  <div class="form-group">
@@ -117,21 +135,70 @@ name:string:tên của người dùng" name="response">@foreach($data->method->r
 @endsection
 
 @section('more_script')
-
-    <script src="{{asset('assets/js/vendor/handlebars.min.js')}}"></script>
-    <script src="{{asset('assets/js/vendor/typeahead.bundle.min.js')}}"></script>
     <script>
         $(document).ready(function() {
-            var a = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                prefetch: "{{route('group')}}"
-            });
-            $("#prefetch").typeahead(null, {
-                name: "countries",
-                source: a
-            });
+            let toggle = $('#toggle_group_name')
+            toggle.on('click', function() {
+                if (toggle.is(":checked")) {
+                    $('#group_name_2').parent().hide()
+                    $('#group_name_1').removeAttr('hidden');
+                } else {
+                    $('#group_name_1').attr('hidden', true);
+                    $('#group_name_2').parent().show()
+                }
+            })
+            let form = $('#main_form')
+            form.on('submit', function (e) {
+                if (toggle.is(":checked")) {
+                    $('#group_name_2').removeAttr('name')
+                } else {
+                    $('#group_name_1').removeAttr('name')
+                }
+            })
+        })
+    </script>
+    <script src="https://cdn.tiny.cloud/1/free/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#myeditorinstance',
+            content_css: 'tinymce-5-dark',
+            skin: 'oxide-dark',
+            height: 270,
+            plugins: 'advcode table checklist image advlist autolink lists link charmap preview codesample imagetool fullscreen',
+            toolbar: 'insertfile | blocks| bold italic | fullscreen | image | link | preview | codesample | bullist numlist checklist |  alignleft aligncenter alignright',
+            menubar: 'insert view',
+            mobile: {
+                menubar: true
+            },
+            setup: function(editor) {
+                editor.on('init', function (e) {
+                    setTimeout(function() {
+                        $("button[tabindex='-1'].tox-notification__dismiss.tox-button.tox-button--naked.tox-button--icon")[0].click()
+                    }, 10);
 
+                })
+            },
+            file_picker_types: 'image',
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input')
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*')
+                input.onchange = function () {
+                    var file = this.files[0];
+                    var reader = new FileReader()
+                    reader.onload = function () {
+                        var id = 'blobid' + (new Date()).getTime()
+                        var blobCache =  tinymce.activeEditor.editorUpload.blobCache
+                        var base64 = reader.result.split(',')[1]
+                        var blobInfo = blobCache.create(id, file, base64)
+                        blobCache.add(blobInfo)
+                        cb(blobInfo.blobUri(), { title: file.name })
+                    }
+                    reader.readAsDataURL(file)
+                }
+                input.click()
+            },
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         });
     </script>
 @endsection

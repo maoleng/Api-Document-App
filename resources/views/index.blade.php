@@ -210,7 +210,7 @@
                                                         aria-labelledby="{{$api->uniqueName}}v-pills-car-tab">
                                                             <p class="mb-0">
                                                                 <h3>Chú ý</h3>
-                                                                <span>{{$api->method->note}}</span>
+                                                                <span>{!! $api->method->note !!}</span>
                                                             </p>
                                                         </div>
                                                     </div> <!-- end tab-content-->

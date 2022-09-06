@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreApiRequest;
-use App\Http\Requests\UpdateApiRequest;
 use App\Models\Api;
 use App\Models\Body;
 use App\Models\Group;
 use App\Models\Header;
+use App\Models\Image;
 use App\Models\Method;
 use App\Models\Response as ResponseModel;
 use Illuminate\Contracts\Foundation\Application;
@@ -15,17 +14,22 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ApiController extends Controller
 {
+    public function __construct()
+    {
+        $group_names = (new GroupController())->index();
+        \Illuminate\Support\Facades\View::share('group_names', $group_names);
+    }
+
     public function index(): Factory|View|Application
     {
         $groups = Group::with('api', 'api.method', 'api.method.headers', 'api.method.bodies', 'api.method.responses')
-//            ->join('apis', 'apis.group_id', '=', 'groups.id')
-//            ->orderBy('order', 'DESC')
             ->get();
-//dd($groups);
         return view('index', [
             'groups' => $groups
         ]);
@@ -53,8 +57,10 @@ class ApiController extends Controller
             'url' => $data['url'],
             'sample_body' => $data['sample_body'] ?? null,
             'sample_response' => $data['sample_response'] ?? null,
-            'note' => $data['note'] ?? null,
         ]);
+        $note_content = $this->handleImage($data['note'], $method_create);
+        $method_create->update(['note' => $note_content]);
+
         $last_order = Api::query()->where('group_id', $group_id)->max('order');
         Api::query()->create([
             'name' => $data['api_name'],
@@ -109,22 +115,29 @@ class ApiController extends Controller
     }
 
 
-    public function update(Request $request, Api $api)
+    public function update(Request $request, Api $api): RedirectResponse
     {
         $data = $request->all();
         $method_id = $api->method->id;
-
+        if ($data['group_name'] !== $api->group->name) {
+            $group = Group::query()->firstOrCreate(['name' => $data['group_name']], ['name' => $data['group_name']]);
+        } else {
+            $group = $api->group->id;
+        }
         Api::query()->where('id', $api->id)->update([
+            'group_id' => $group->id,
             'name' => $data['api_name'],
         ]);
 
-        Method::query()->where('id', $method_id)->update([
+        $method = Method::query()->find($method_id);
+        $method->update([
             'name' => $data['type_name'],
             'url' => $data['url'],
             'sample_body' => $data['sample_body'],
             'sample_response' => $data['sample_response'],
-            'note' => $data['note'],
         ]);
+        $note_content = $this->handleImage($data['note'], $method);
+        $method->update(['note' => $note_content]);
 
         if (isset($data['header'])) {
             Header::query()->where('method_id', $api->method->id)->delete();
@@ -165,14 +178,66 @@ class ApiController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Api  $api
-     * @return Response
-     */
-    public function destroy(Api $api)
+    public function destroy(Template $template): RedirectResponse
     {
-        //
+        $template->schedule->delete();
+        $template->update(['active' => false]);
+        $image_ids = $template->images->pluck('id');
+        Image::query()->whereIn('id', $image_ids)->update(['active' => false]);
+
+        return redirect()->route('template.index');
     }
+
+    public function handleImage($note, $method)
+    {
+        preg_match_all('/data:image\/[A-Za-z-]+;base64.[A-Za-z+\/0-9=]+/', $note, $matches, PREG_OFFSET_CAPTURE);
+        $images = $matches[0];
+        if (isset($images)) {
+            foreach ($images as $image) {
+                $content = base64_decode(explode(';base64,', $image[0])[1]);
+                $mime = $this->getMimeType($image[0]);
+                if (empty($mime)) {
+                    Session::flash('message', 'Sai thể loại ảnh');
+                    return redirect()->back();
+                }
+                $path = '/project-' . $method->id . '/'. Str::random(15) . '.' . $mime;
+                Storage::disk('google')->put($path, $content);
+                $source = Storage::disk('google')->url($path);
+                Image::query()->create([
+                    'source' => $source,
+                    'size' => strlen($image[0]),
+                    'path' => $path,
+                    'method_id' => $method->id,
+                ]);
+                $note = str_replace($image[0], $source, $note);
+            }
+        }
+
+        return $note;
+    }
+
+    public function getMimeType($base64): ?string
+    {
+        if (str_starts_with($base64, 'data:image/bmp')) {
+            return 'bmp';
+        }
+        if (str_starts_with($base64, 'data:image/jpeg')) {
+            return 'jpg';
+        }
+        if (str_starts_with($base64, 'data:image/png')) {
+            return 'png';
+        }
+        if (str_starts_with($base64, 'data:image/x-icon')) {
+            return 'ico';
+        }
+        if (str_starts_with($base64, 'data:image/webp')) {
+            return 'webp';
+        }
+        if (str_starts_with($base64, 'data:image/gif')) {
+            return 'gif';
+        }
+
+        return null;
+    }
+
 }
