@@ -50,26 +50,14 @@ class Method extends Model
 
     public function getBeautifulUrlAttribute()
     {
-        if(strpos($this->url, ':')) {
-            return str_replace('{', '', explode('{', $this->url)[0]);
+        $url = $this->url;
+        preg_match_all('/\{.*\}/U', $url, $matches);
+        foreach ($matches[0] as $matches) {
+            $arr = explode(':', $matches);
+            $new_url = '<span data-toggle="tooltip" title="" data-original-title=' . $arr[1] . '>' . $arr[0] . '</span>';
+            $url = str_replace($matches, $new_url, $url);
         }
-        return $this->url;
-    }
-
-    public function getValueToolTipUrlAttribute(): array|string|null
-    {
-        if(strpos($this->url, ':')) {
-            return str_replace('}', '', explode(':', $this->url)[1]);
-        }
-        return null;
-    }
-
-    public function getKeyToolTipUrlAttribute(): ?string
-    {
-        if(strpos($this->url, ':')) {
-            return explode('{', explode(':', $this->url)[0])[1];
-        }
-        return null;
+        return str_replace(array('}', '{'), '', $url);
     }
 
     public function getBeautifulJsonBodyAttribute(): bool|string

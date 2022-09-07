@@ -75,7 +75,7 @@
                                                data-toggle="collapse" href="#collapse{{$api->uniqueName}}" aria-expanded="false"
                                                aria-controls="collapse{{$api->uniqueName}}">
                                                 <span class="badge {{$api->method->badgeColorByMethod}}">{{$api->method->beautyMethodName}}</span>
-                                                {{$api->method->beautifulUrl}}<span data-toggle="tooltip" title="" data-original-title="{{$api->method->valueToolTipUrl}}">{{{$api->method->keyToolTipUrl}}}</span>
+                                                {!! $api->method->beautifulUrl !!}
                                             </a>
                                         </h3>
                                         <span>{{$api->name}}</span>
