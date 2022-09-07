@@ -200,7 +200,7 @@ class ApiController extends Controller
                     Session::flash('message', 'Sai thể loại ảnh');
                     return redirect()->back();
                 }
-                $path = '/project-' . $method->id . '/'. Str::random(15) . '.' . $mime;
+                $path = Str::random(15) . '.' . $mime;
                 Storage::disk('google')->put($path, $content);
                 $source = Storage::disk('google')->url($path);
                 Image::query()->create([
